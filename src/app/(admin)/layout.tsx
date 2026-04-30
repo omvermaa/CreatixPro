@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminEmails = process.env.ADMIN_EMAIL?.split(',').map(e => e.trim()) || [];
   
   const isAuthorized = user?.emailAddresses.some(
-    (email) => email.emailAddress === adminEmail
+    (email) => adminEmails.includes(email.emailAddress)
   );
 
-  if (!adminEmail || !isAuthorized) {
+  if (adminEmails.length === 0 || !isAuthorized) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="bg-white p-8 border border-gray-200 rounded-sm shadow-sm max-w-md w-full text-center">
