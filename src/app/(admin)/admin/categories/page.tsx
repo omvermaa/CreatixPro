@@ -18,7 +18,10 @@ export default async function CategoriesPage() {
       <div className="bg-white p-6 border border-gray-200">
         <h2 className="text-xl font-bold mb-6">Manage Categories</h2>
         
-        <form action={createCategory} className="mb-6 flex gap-2">
+        <form action={async (formData) => {
+          "use server";
+          await createCategory(formData);
+        }} className="mb-6 flex gap-2">
           <Input name="name" placeholder="New Category Name" required className="flex-1" />
           <Button type="submit" className="bg-primary text-white hover:bg-primary/90">Add</Button>
         </form>
@@ -43,7 +46,10 @@ export default async function CategoriesPage() {
       <div className="bg-white p-6 border border-gray-200">
         <h2 className="text-xl font-bold mb-6">Manage Subcategories</h2>
         
-        <form action={createSubcategory} className="mb-6 flex flex-col gap-3">
+        <form action={async (formData) => {
+          "use server";
+          await createSubcategory(formData);
+        }} className="mb-6 flex flex-col gap-3">
           <select name="categoryId" required className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm">
             <option value="">Select Parent Category</option>
             {categories.map((cat: any) => (

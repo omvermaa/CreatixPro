@@ -25,7 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Return Home
             </Link>
             <div className="text-sm text-gray-500 mt-4 flex items-center gap-2">
-              Logged in as {user?.emailAddresses[0]?.emailAddress} <UserButton afterSignOutUrl="/" />
+              Logged in as {user?.emailAddresses[0]?.emailAddress} <UserButton />
             </div>
           </div>
         </div>
