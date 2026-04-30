@@ -1,0 +1,67 @@
+import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const user = await currentUser();
+  const adminEmail = process.env.ADMIN_EMAIL;
+  
+  const isAuthorized = user?.emailAddresses.some(
+    (email) => email.emailAddress === adminEmail
+  );
+
+  if (!adminEmail || !isAuthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="bg-white p-8 border border-gray-200 rounded-sm shadow-sm max-w-md w-full text-center">
+          <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-6">
+            <span className="text-red-500 text-2xl font-bold">!</span>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
+          <p className="text-gray-600 mb-8">You are not authorized to view the admin portal. This area is restricted to administrators only.</p>
+          <div className="flex flex-col items-center gap-4">
+            <Link href="/" className="w-full px-6 py-3 bg-gradient-to-r from-[#B8941F] to-[#9A7B15] text-white font-semibold uppercase tracking-wider hover:brightness-110 transition-all rounded-sm">
+              Return Home
+            </Link>
+            <div className="text-sm text-gray-500 mt-4 flex items-center gap-2">
+              Logged in as {user?.emailAddresses[0]?.emailAddress} <UserButton afterSignOutUrl="/" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <aside className="w-64 bg-primary text-white flex flex-col">
+        <div className="p-6 border-b border-gray-800">
+          <Link href="/admin" className="text-xl font-bold font-serif tracking-widest text-white">
+            CREATIX ADMIN
+          </Link>
+        </div>
+        <nav className="flex-1 p-4 space-y-2">
+          <Link href="/admin" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Dashboard</Link>
+          <Link href="/admin/products" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Products</Link>
+          <Link href="/admin/categories" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Categories</Link>
+          <Link href="/admin/messages" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Messages</Link>
+          <Link href="/" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition mt-auto text-gray-400">View Live Site</Link>
+        </nav>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
+          <h2 className="text-lg font-semibold text-gray-800">Admin Portal</h2>
+          <div className="flex items-center gap-4">
+            <UserButton />
+          </div>
+        </header>
+        <main className="flex-1 overflow-y-auto p-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
