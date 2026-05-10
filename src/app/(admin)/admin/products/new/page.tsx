@@ -102,7 +102,7 @@ export default function NewProductPage() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Category</label>
-            <select {...register("category")} className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm">
+            <select {...register("category")} className="w-full h-10 px-3 py-2 rounded-md border border-input bg-transparent text-sm">
               <option value="">Select Category...</option>
               {categories.map(c => (
                 <option key={c._id} value={c._id}>{c.name}</option>
@@ -112,7 +112,7 @@ export default function NewProductPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Subcategory (Optional)</label>
-            <select {...register("subcategory")} className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm" disabled={!selectedCategory || !activeCategoryObj?.subcategories?.length}>
+            <select {...register("subcategory")} className="w-full h-10 px-3 py-2 rounded-md border border-input bg-transparent text-sm" disabled={!selectedCategory || !activeCategoryObj?.subcategories?.length}>
               <option value="">Select Subcategory...</option>
               {activeCategoryObj?.subcategories?.map((s: any) => (
                 <option key={s._id} value={s._id}>{s.name}</option>
@@ -149,7 +149,7 @@ export default function NewProductPage() {
           )}
         </div>
 
-        <Button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-white">
+        <Button type="submit" disabled={loading} className="w-full bg-[#0A0A0A] hover:bg-[#0A0A0A]/90 text-white">
           {loading ? "Creating..." : "Save Product"}
         </Button>
       </form>

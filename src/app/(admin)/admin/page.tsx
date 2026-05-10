@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
       
       <div className="mt-8">
         <Link href="/admin/products/new">
-          <Button className="bg-primary text-white hover:bg-primary/90">
+          <Button className="bg-[#0A0A0A] text-white hover:bg-[#0A0A0A]/90">
             + Quick Add Product
           </Button>
         </Link>

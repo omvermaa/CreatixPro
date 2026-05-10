@@ -3,7 +3,7 @@ import connectDB from "@/lib/db";
 import Product from "@/lib/models/Product";
 import Category from "@/lib/models/Category";
 import { Button } from "@/components/ui/button";
-
+import ProductActions from "./ProductActions";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminProductsPage() {
@@ -15,7 +15,7 @@ export default async function AdminProductsPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Manage Products</h1>
         <Link href="/admin/products/new">
-          <Button className="bg-primary text-white hover:bg-primary/90">+ Add Product</Button>
+          <Button className="bg-[#0A0A0A] text-white hover:bg-[#0A0A0A]/90">+ Add Product</Button>
         </Link>
       </div>
 
@@ -41,8 +41,7 @@ export default async function AdminProductsPage() {
                   <td className="px-6 py-4">{product.category?.name || "Uncategorized"}</td>
                   <td className="px-6 py-4">{product.minOrderQty}</td>
                   <td className="px-6 py-4 text-right">
-                    <Button variant="outline" size="sm" className="mr-2" disabled>Edit</Button>
-                    <Button variant="destructive" size="sm" disabled>Delete</Button>
+                    <ProductActions id={product._id.toString()} />
                   </td>
                 </tr>
               ))

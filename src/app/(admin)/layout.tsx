@@ -33,9 +33,28 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     );
   }
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 text-gray-900" style={{
+      "--background": "#ffffff",
+      "--foreground": "#0A0A0A",
+      "--card": "#ffffff",
+      "--card-foreground": "#0A0A0A",
+      "--popover": "#ffffff",
+      "--popover-foreground": "#0A0A0A",
+      "--primary": "#0A0A0A",
+      "--primary-foreground": "#ffffff",
+      "--secondary": "#F7F7F7",
+      "--secondary-foreground": "#0A0A0A",
+      "--muted": "#F3F3F3",
+      "--muted-foreground": "#737373",
+      "--accent": "#B8941F",
+      "--accent-foreground": "#ffffff",
+      "--destructive": "#EF4444",
+      "--border": "rgba(0,0,0,0.12)",
+      "--input": "rgba(0,0,0,0.12)",
+      "--ring": "#B8941F"
+    } as React.CSSProperties}>
       {/* Sidebar */}
-      <aside className="w-64 bg-primary text-white flex flex-col">
+      <aside className="w-64 bg-[#0A0A0A] text-white flex flex-col">
         <div className="p-6 border-b border-gray-800">
           <Link href="/admin" className="text-xl font-bold font-serif tracking-widest text-white">
             CREATIX ADMIN
