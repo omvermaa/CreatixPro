@@ -52,6 +52,7 @@ export default function QuoteModal({ productName }: QuoteModalProps) {
     };
 
     try {
+      // 1. Submit to internal database
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,6 +60,28 @@ export default function QuoteModal({ productName }: QuoteModalProps) {
       });
 
       if (!res.ok) throw new Error("Failed to send request.");
+
+      // 2. Submit to Web3Forms directly from the browser to bypass Cloudflare
+      try {
+        const web3formsData = {
+          ...data,
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "dc26db96-ff71-4d42-8688-dc9395cd1349",
+          subject: `New Quote Request for ${productName}`,
+          from_name: "Creatix Pro Website"
+        };
+
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify(web3formsData)
+        });
+      } catch (err) {
+        console.error("Web3Forms error (Client):", err);
+      }
+
       setSuccess(true);
       setTimeout(() => {
         setIsOpen(false);

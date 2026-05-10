@@ -18,6 +18,26 @@ export default function ContactPage() {
     try {
       const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       if (!res.ok) throw new Error("Failed to send message.");
+
+      try {
+        const web3formsData = {
+          ...data,
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "dc26db96-ff71-4d42-8688-dc9395cd1349",
+          subject: `New Inquiry from ${data.name}`,
+          from_name: "Creatix Pro Website"
+        };
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify(web3formsData)
+        });
+      } catch (err) {
+        console.error("Web3Forms error (Client):", err);
+      }
+
       setSuccess(true);
       (e.target as HTMLFormElement).reset();
     } catch (err: any) { setError(err.message); } finally { setLoading(false); }
