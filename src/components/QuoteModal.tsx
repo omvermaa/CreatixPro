@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ArrowRight, X, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +15,11 @@ export default function QuoteModal({ productName }: QuoteModalProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -104,10 +110,10 @@ export default function QuoteModal({ productName }: QuoteModalProps) {
         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+      {mounted && isOpen ? createPortal(
+        <div className="fixed inset-0 z-[999999] flex items-start justify-center p-4 pt-10 md:pt-24 overflow-y-auto">
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => !loading && setIsOpen(false)}
           />
           <div className="relative bg-white border border-gray-100 shadow-2xl w-full max-w-lg p-8 md:p-10 z-10 animate-in fade-in zoom-in duration-300">
@@ -167,8 +173,9 @@ export default function QuoteModal({ productName }: QuoteModalProps) {
               </form>
             )}
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+      ) : null}
     </>
   );
 }
