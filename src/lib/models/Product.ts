@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Subcategory'
   },
-  imageUrl: { type: String, required: true }, // Cloudinary URL
+  imageUrl: { type: String, required: true },
+  galleryImages: [{ type: String }],
   minOrderQty: { type: Number, default: 50 },
   customizationOptions: [{ type: String }],
 }, { timestamps: true });

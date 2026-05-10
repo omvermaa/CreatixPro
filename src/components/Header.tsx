@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { Menu, X, Gift, ArrowRight, ChevronRight, ChevronDown } from "lucide-react";
+import { Menu, X, Gift, ArrowRight, ChevronRight, ChevronDown, LayoutDashboard } from "lucide-react";
+import SearchBar from "./SearchBar";
 
 export default function Header({ categories = [] }: { categories: any[] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -82,54 +84,28 @@ export default function Header({ categories = [] }: { categories: any[] }) {
               {categories.map((cat: any) => (
                 <div key={cat._id} className="group/sub relative">
                   <Link 
-                    href={`/products?category=${cat.slug}`}
+                    href={`/products/${cat.slug}`}
                     className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0"
                   >
                     {cat.name}
-                    {(cat.subcategories?.length > 0 || cat.products?.length > 0) && <ChevronRight size={14} className="text-gray-400" />}
+                    {(cat.subcategories?.length > 0) && <ChevronRight size={14} className="text-gray-400" />}
                   </Link>
 
-                  {/* Level 2 Flyout (Subcategories AND Direct Products) */}
-                  {(cat.subcategories?.length > 0 || cat.products?.length > 0) && (
+                  {/* Level 2 Flyout (Subcategories) */}
+                  {(cat.subcategories?.length > 0) && (
                     <div className="absolute top-0 left-full w-56 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 -translate-x-2 group-hover/sub:translate-x-0 z-50">
                       
                       {/* Subcategories */}
                       {cat.subcategories?.map((sub: any) => (
                         <div key={sub._id} className="group/prod relative">
                           <Link 
-                            href={`/products?category=${cat.slug}&subcategory=${sub.slug}`}
+                            href={`/products/${cat.slug}/${sub.slug}`}
                             className="flex items-center justify-between px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0"
                           >
                             {sub.name}
-                            <ChevronRight size={14} className="text-gray-400" />
+                            <ChevronRight size={14} className="text-gray-400 opacity-0" />
                           </Link>
-                          
-                          {/* Level 3 Flyout (Subcategory Products) */}
-                          {sub.products?.length > 0 && (
-                            <div className="absolute top-0 left-full w-56 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover/prod:opacity-100 group-hover/prod:visible transition-all duration-300 -translate-x-2 group-hover/prod:translate-x-0 z-50">
-                              {sub.products.map((prod: any) => (
-                                <Link 
-                                  key={prod._id}
-                                  href={`/products/${prod._id}`}
-                                  className="block px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0 truncate"
-                                >
-                                  {prod.name}
-                                </Link>
-                              ))}
-                            </div>
-                          )}
                         </div>
-                      ))}
-
-                      {/* Direct Products (No Subcategory) */}
-                      {cat.products?.map((prod: any) => (
-                        <Link 
-                          key={prod._id}
-                          href={`/products/${prod._id}`}
-                          className="block px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0 truncate"
-                        >
-                          {prod.name}
-                        </Link>
                       ))}
 
                     </div>
@@ -150,15 +126,24 @@ export default function Header({ categories = [] }: { categories: any[] }) {
           </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
+          <SearchBar className="w-48 xl:w-64" />
           <Link
             href="/contact"
-            className="group flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#B8941F] to-[#9A7B15] text-white text-sm font-semibold uppercase tracking-wider hover:brightness-110 transition-all duration-300"
+            className="group flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#B8941F] to-[#9A7B15] text-white text-sm font-semibold uppercase tracking-wider hover:brightness-110 transition-all duration-300 whitespace-nowrap"
           >
             Get Quote
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
-          <UserButton />
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Link
+                label="Admin Panel"
+                labelIcon={<LayoutDashboard size={16} />}
+                href="/admin"
+              />
+            </UserButton.MenuItems>
+          </UserButton>
         </div>
 
         <button className={`md:hidden p-2 transition-all duration-500 ${!isScrolled && isHome && !mobileOpen ? "text-white" : "text-gray-700"} ${mobileOpen ? "rotate-90" : "rotate-0"}`} onClick={() => setMobileOpen(!mobileOpen)}>
@@ -177,6 +162,9 @@ export default function Header({ categories = [] }: { categories: any[] }) {
         mobileOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
       }`}>
         <nav className="flex flex-col px-8 py-8 gap-6 flex-1 transition-all duration-700 delay-100">
+            <div className="mb-2">
+              <SearchBar className="w-full" inputClassName="h-12 text-base" buttonClassName="px-5" />
+            </div>
             {navLinks.slice(0, 3).map((link) => (
               <Link 
                 key={link.href} 
@@ -201,63 +189,43 @@ export default function Header({ categories = [] }: { categories: any[] }) {
                 />
               </div>
               
-              <div className={`overflow-hidden transition-all duration-300 ${mobileProductsOpen ? "max-h-[1000px] mt-6 opacity-100" : "max-h-0 opacity-0"}`}>
+              <div className={`overflow-hidden transition-all duration-300 ${mobileProductsOpen ? "max-h-[3000px] mt-6 opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="flex flex-col gap-6 pl-4 border-l-2 border-[#B8941F]/30 ml-2">
                   {categories.map((cat: any) => (
                     <div key={cat._id} className="flex flex-col gap-3">
-                      <Link 
-                        href={`/products?category=${cat.slug}`} 
-                        onClick={() => setMobileOpen(false)} 
-                        className="text-base font-semibold text-gray-800 hover:text-[#B8941F]"
-                      >
-                        {cat.name}
-                      </Link>
+                      <div className="flex items-center justify-between">
+                        <Link 
+                          href={`/products/${cat.slug}`} 
+                          onClick={() => setMobileOpen(false)} 
+                          className="text-base font-semibold text-gray-800 hover:text-[#B8941F] flex-1"
+                        >
+                          {cat.name}
+                        </Link>
+                        {cat.subcategories?.length > 0 && (
+                          <div 
+                            className="p-2 cursor-pointer text-gray-500 hover:text-[#B8941F]"
+                            onClick={() => setOpenCategory(openCategory === cat._id ? null : cat._id)}
+                          >
+                            <ChevronDown size={18} className={`transition-transform duration-300 ${openCategory === cat._id ? "rotate-180" : ""}`} />
+                          </div>
+                        )}
+                      </div>
                       
                       {cat.subcategories?.length > 0 && (
-                        <div className="flex flex-col gap-4 pl-4 border-l border-gray-200 ml-2 mt-2">
-                          {cat.subcategories.map((sub: any) => (
-                            <div key={sub._id} className="flex flex-col gap-2">
-                              <Link 
-                                href={`/products?category=${cat.slug}&subcategory=${sub.slug}`} 
-                                onClick={() => setMobileOpen(false)} 
-                                className="text-sm font-medium text-gray-600 hover:text-[#B8941F]"
-                              >
-                                {sub.name}
-                              </Link>
-                              
-                              {sub.products?.length > 0 && (
-                                <div className="flex flex-col gap-3 pl-4 mt-2">
-                                  {sub.products.map((prod: any) => (
-                                    <Link 
-                                      key={prod._id} 
-                                      href={`/products/${prod._id}`} 
-                                      onClick={() => setMobileOpen(false)} 
-                                      className="text-base text-gray-500 hover:text-[#B8941F] truncate flex items-center gap-2"
-                                    >
-                                      <span className="w-1.5 h-1.5 rounded-full bg-[#B8941F]/50 flex-shrink-0"></span>
-                                      {prod.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {cat.products?.length > 0 && !cat.subcategories?.length && (
-                        <div className="flex flex-col gap-3 pl-4 border-l border-gray-200 ml-2 mt-2">
-                          {cat.products.map((prod: any) => (
-                            <Link 
-                              key={prod._id} 
-                              href={`/products/${prod._id}`} 
-                              onClick={() => setMobileOpen(false)} 
-                              className="text-base text-gray-500 hover:text-[#B8941F] truncate flex items-center gap-2"
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#B8941F]/50 flex-shrink-0"></span>
-                              {prod.name}
-                            </Link>
-                          ))}
+                        <div className={`overflow-hidden transition-all duration-300 ${openCategory === cat._id ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}>
+                          <div className="flex flex-col gap-4 pl-4 border-l border-gray-200 ml-2 mt-2">
+                            {cat.subcategories.map((sub: any) => (
+                              <div key={sub._id} className="flex flex-col gap-2">
+                                <Link 
+                                  href={`/products/${cat.slug}/${sub.slug}`} 
+                                  onClick={() => setMobileOpen(false)} 
+                                  className="text-sm font-medium text-gray-600 hover:text-[#B8941F]"
+                                >
+                                  {sub.name}
+                                </Link>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
