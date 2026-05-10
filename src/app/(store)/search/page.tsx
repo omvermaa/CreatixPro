@@ -13,7 +13,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   await connectDB();
 
-  let products = [];
+  let products: any[] = [];
   if (query.trim()) {
     products = await Product.find({
       $or: [
