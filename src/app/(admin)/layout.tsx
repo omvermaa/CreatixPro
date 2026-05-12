@@ -2,6 +2,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import AdminSidebar from "@/components/AdminSidebar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -54,25 +55,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       "--ring": "#B8941F"
     } as React.CSSProperties}>
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0A0A0A] text-white flex flex-col">
-        <div className="p-6 border-b border-gray-800">
-          <Link href="/admin" className="text-xl font-bold font-serif tracking-widest text-white">
-            CREATIX ADMIN
-          </Link>
-        </div>
-        <nav className="flex-1 p-4 space-y-2">
-          <Link href="/admin" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Dashboard</Link>
-          <Link href="/admin/products" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Products</Link>
-          <Link href="/admin/categories" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Categories</Link>
-          <Link href="/admin/messages" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition">Manage Messages</Link>
-          <Link href="/" className="block px-4 py-2 rounded-sm hover:bg-gray-800 transition mt-auto text-gray-400">View Live Site</Link>
-        </nav>
-      </aside>
+      <AdminSidebar />
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
-          <h2 className="text-lg font-semibold text-gray-800">Admin Portal</h2>
+      <div className="flex-1 flex flex-col overflow-hidden w-full">
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shrink-0">
+          <h2 className="text-lg font-semibold text-gray-800 pl-12 md:pl-0">Admin Portal</h2>
           <div className="flex items-center gap-4">
             <UserButton />
           </div>
