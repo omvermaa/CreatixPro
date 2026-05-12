@@ -119,7 +119,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
 
         <div className="border-t border-white/10 py-6">
           <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} Creatix Pro. All rights reserved.</p>
+            <p className="text-xs text-gray-600" suppressHydrationWarning>&copy; {new Date().getFullYear()} Creatix Pro. All rights reserved.</p>
             <p className="text-xs text-gray-600">Crafted with precision in Delhi NCR</p>
           </div>
         </div>

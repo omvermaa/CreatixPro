@@ -15,8 +15,13 @@ export default function Header({ categories = [] }: { categories: any[] }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -169,15 +174,17 @@ export default function Header({ categories = [] }: { categories: any[] }) {
             Get Quote
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Link
-                label="Admin Panel"
-                labelIcon={<LayoutDashboard size={16} />}
-                href="/admin"
-              />
-            </UserButton.MenuItems>
-          </UserButton>
+          {isMounted && (
+            <UserButton>
+              <UserButton.MenuItems>
+                <UserButton.Link
+                  label="Admin Panel"
+                  labelIcon={<LayoutDashboard size={16} />}
+                  href="/admin"
+                />
+              </UserButton.MenuItems>
+            </UserButton>
+          )}
         </div>
 
         <button className={`md:hidden p-2 transition-all duration-500 ${!isScrolled && isHome && !mobileOpen ? "text-white" : "text-gray-700"} ${mobileOpen ? "rotate-90" : "rotate-0"}`} onClick={() => setMobileOpen(!mobileOpen)}>
