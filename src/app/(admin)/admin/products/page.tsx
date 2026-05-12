@@ -19,8 +19,8 @@ export default async function AdminProductsPage() {
         </Link>
       </div>
 
-      <div className="bg-white border text-left border-gray-200 rounded-sm overflow-hidden">
-        <table className="w-full text-sm text-gray-600">
+      <div className="bg-white border text-left border-gray-200 rounded-sm overflow-x-auto">
+        <table className="w-full text-sm text-gray-600 min-w-[600px]">
           <thead className="bg-gray-50 border-b border-gray-200 text-gray-700">
             <tr>
               <th className="px-6 py-4 font-semibold text-left">Product</th>
