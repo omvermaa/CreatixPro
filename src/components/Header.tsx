@@ -11,6 +11,7 @@ export default function Header({ categories = [] }: { categories: any[] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -74,47 +75,80 @@ export default function Header({ categories = [] }: { categories: any[] }) {
           ))}
 
           {/* Products Dropdown */}
-          <div className="group relative px-4 py-2 flex items-center gap-1 cursor-pointer">
+          <div 
+            className="group relative px-4 py-2 flex items-center gap-1 cursor-pointer"
+            onMouseLeave={() => setHoveredCategory(null)}
+          >
             <Link href="/products" className={`text-sm font-bold uppercase tracking-widest transition-all duration-300 ${linkColorClass}`}>
               Products
             </Link>
             <ChevronDown size={14} className={`${!isScrolled && isHome ? "text-white" : "text-gray-500"} group-hover:rotate-180 transition-transform duration-300`} />
             
-            <div className="absolute top-full left-0 mt-0 w-64 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 z-50">
-              {categories.map((cat: any) => (
-                <div key={cat._id} className="group/sub relative">
-                  <Link 
-                    href={`/products/${cat.slug}`}
-                    className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0"
-                  >
-                    {cat.name}
-                    {(cat.subcategories?.length > 0) && <ChevronRight size={14} className="text-gray-400" />}
-                  </Link>
+            <div className="absolute top-full left-0 mt-0 w-[600px] bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 z-50 flex max-h-[calc(100vh-120px)] overflow-hidden">
+              
+              {/* Categories Column */}
+              <div className="w-[45%] border-r border-gray-100 overflow-y-auto custom-scrollbar py-2 bg-white shrink-0">
+                {categories.map((cat: any) => {
+                  const isActive = hoveredCategory ? hoveredCategory === cat._id : categories[0]?._id === cat._id;
+                  return (
+                    <div 
+                      key={cat._id} 
+                      className="relative"
+                      onMouseEnter={() => setHoveredCategory(cat._id)}
+                    >
+                      <Link 
+                        href={`/products/${cat.slug}`}
+                        className={`flex items-center justify-between px-5 py-3.5 text-sm font-semibold transition-colors border-b border-gray-50 last:border-0 ${
+                          isActive ? "bg-gray-50 text-[#B8941F]" : "text-gray-700 hover:bg-gray-50 hover:text-[#B8941F]"
+                        }`}
+                      >
+                        {cat.name}
+                        {(cat.subcategories?.length > 0) && (
+                          <ChevronRight size={14} className={`transition-colors ${isActive ? "text-[#B8941F]" : "text-gray-300"}`} />
+                        )}
+                      </Link>
+                    </div>
+                  );
+                })}
+                {categories.length === 0 && (
+                  <div className="px-5 py-3.5 text-sm text-gray-500">No categories found</div>
+                )}
+              </div>
 
-                  {/* Level 2 Flyout (Subcategories) */}
-                  {(cat.subcategories?.length > 0) && (
-                    <div className="absolute top-0 left-full w-56 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 -translate-x-2 group-hover/sub:translate-x-0 z-50">
-                      
-                      {/* Subcategories */}
-                      {cat.subcategories?.map((sub: any) => (
-                        <div key={sub._id} className="group/prod relative">
+              {/* Subcategories Column */}
+              <div className="w-[55%] overflow-y-auto custom-scrollbar py-4 bg-gray-50/50 shrink-0">
+                {(() => {
+                  const activeCat = categories.find((c: any) => c._id === hoveredCategory) || categories[0];
+                  
+                  if (!activeCat || !activeCat.subcategories || activeCat.subcategories.length === 0) {
+                    return (
+                      <div className="px-6 py-2 text-sm text-gray-500 italic">
+                        No subcategories available.
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="flex flex-col">
+                      <div className="px-6 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 border-b border-gray-200/50 pb-3">
+                        {activeCat.name}
+                      </div>
+                      <div className="flex flex-col gap-1 px-2 mt-2">
+                        {activeCat.subcategories.map((sub: any) => (
                           <Link 
-                            href={`/products/${cat.slug}/${sub.slug}`}
-                            className="flex items-center justify-between px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#B8941F] transition-colors border-b border-gray-50 last:border-0"
+                            key={sub._id}
+                            href={`/products/${activeCat.slug}/${sub.slug}`}
+                            className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-[#B8941F] hover:bg-white rounded-md transition-colors"
                           >
                             {sub.name}
-                            <ChevronRight size={14} className="text-gray-400 opacity-0" />
                           </Link>
-                        </div>
-                      ))}
-
+                        ))}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              {categories.length === 0 && (
-                <div className="px-4 py-3 text-sm text-gray-500">No categories found</div>
-              )}
+                  );
+                })()}
+              </div>
+
             </div>
           </div>
 

@@ -9,14 +9,20 @@ export default async function HomePage() {
   await connectDB();
   const rawCategories = await Category.find({}).lean();
   
-  // Fetch an image for each category (first product's image)
+  // Fetch an image for each category (prioritize cat.imageUrl, fallback to first product)
   const categoriesWithImages = await Promise.all(
     rawCategories.map(async (cat: any) => {
-      const product = await Product.findOne({ category: cat._id }).select('imageUrl').lean();
+      let imageUrl = cat.imageUrl || null;
+
+      if (!imageUrl) {
+        const product = await Product.findOne({ category: cat._id }).select('imageUrl').lean();
+        imageUrl = product?.imageUrl || null;
+      }
+
       return {
         ...cat,
         _id: cat._id.toString(),
-        imageUrl: product?.imageUrl || null,
+        imageUrl,
       };
     })
   );

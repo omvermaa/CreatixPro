@@ -51,9 +51,21 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       }))
   }));
 
+  // Create a lite version for the Header to prevent OOM
+  const headerCategories = categoriesWithSubcategoriesAndProducts.map(cat => ({
+    _id: cat._id,
+    name: cat.name,
+    slug: cat.slug,
+    subcategories: cat.subcategories.map(sub => ({
+      _id: sub._id,
+      name: sub.name,
+      slug: sub.slug
+    }))
+  }));
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <Header categories={categoriesWithSubcategoriesAndProducts} />
+      <Header categories={headerCategories} />
 
       <main className="flex-1 pt-20">{children}</main>
 

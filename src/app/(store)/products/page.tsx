@@ -28,7 +28,7 @@ export default async function ProductsPage() {
       description: cat.description || '',
       productCount: catProducts.length,
       subcategoryCount: catSubcategories.length,
-      imageUrl: representativeImage,
+      imageUrl: cat.slug === 'corporate-gifts' ? '/purplepalette.in/Corporate%20Gifts/main.jpeg' : (cat.imageUrl || representativeImage),
     };
   }).filter((cat: any) => cat.productCount > 0);
 
