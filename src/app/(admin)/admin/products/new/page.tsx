@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm as useRHForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { X, ImagePlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +16,7 @@ const productSchema = z.object({
   name: z.string().min(2, "Name is required"),
   description: z.string().min(10, "Description needs to be longer"),
   category: z.string().min(1, "Category is required"),
-  subcategory: z.string().optional(),
+  subcategory: z.string().min(1, "Subcategory is required"),
   minOrderQty: z.coerce.number().min(1),
   customizationOptions: z.string().optional(),
 });
@@ -23,6 +24,7 @@ const productSchema = z.object({
 export default function NewProductPage() {
   const router = useRouter();
   const [imageUrl, setImageUrl] = useState("");
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
@@ -44,6 +46,10 @@ export default function NewProductPage() {
       .catch(err => console.error("Failed to fetch categories:", err));
   }, []);
 
+  const removeGalleryImage = (index: number) => {
+    setGalleryImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: any) => {
     if (!imageUrl) {
       setError("Please upload an image first.");
@@ -56,6 +62,7 @@ export default function NewProductPage() {
     const formattedData = {
       ...data,
       imageUrl,
+      galleryImages,
       customizationOptions: data.customizationOptions ? data.customizationOptions.split(',').map((s: string) => s.trim()) : [],
     };
 
@@ -111,13 +118,14 @@ export default function NewProductPage() {
             {errors.category && <p className="text-sm text-red-500 mt-1">{errors.category.message as string}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Subcategory (Optional)</label>
+            <label className="block text-sm font-medium mb-1">Subcategory</label>
             <select {...register("subcategory")} className="w-full h-10 px-3 py-2 rounded-md border border-input bg-transparent text-sm" disabled={!selectedCategory || !activeCategoryObj?.subcategories?.length}>
               <option value="">Select Subcategory...</option>
               {activeCategoryObj?.subcategories?.map((s: any) => (
                 <option key={s._id} value={s._id}>{s.name}</option>
               ))}
             </select>
+            {errors.subcategory && <p className="text-sm text-red-500 mt-1">{errors.subcategory.message as string}</p>}
           </div>
         </div>
 
@@ -139,12 +147,55 @@ export default function NewProductPage() {
           </div>
         </div>
 
+        {/* Main Product Image */}
         <div>
-          <label className="block text-sm font-medium mb-2">Product Image (Cloudinary)</label>
+          <label className="block text-sm font-medium mb-2">Main Product Image</label>
           <ImageUpload onUpload={(url) => setImageUrl(url)} />
           {imageUrl && (
-            <div className="mt-4 border p-2">
+            <div className="mt-4 border p-2 relative inline-block">
               <img src={imageUrl} alt="Uploaded preview" className="h-32 object-contain" />
+              <button
+                type="button"
+                onClick={() => setImageUrl("")}
+                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Gallery / Variant Images */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Variant / Gallery Images</label>
+          <p className="text-xs text-gray-400 mb-3">Upload additional product images to show different variants, colors, or angles.</p>
+          
+          <ImageUpload onUpload={(url) => setGalleryImages(prev => [...prev, url])} />
+
+          {galleryImages.length > 0 && (
+            <div className="mt-4 grid grid-cols-4 gap-3">
+              {galleryImages.map((url, index) => (
+                <div key={index} className="relative group border border-gray-200 p-1">
+                  <img src={url} alt={`Variant ${index + 1}`} className="w-full aspect-square object-contain" />
+                  <button
+                    type="button"
+                    onClick={() => removeGalleryImage(index)}
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                  >
+                    <X size={14} />
+                  </button>
+                  <div className="text-center mt-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Variant {index + 1}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {galleryImages.length === 0 && (
+            <div className="mt-3 border-2 border-dashed border-gray-200 p-6 text-center">
+              <ImagePlus size={24} className="mx-auto text-gray-300 mb-2" />
+              <p className="text-xs text-gray-400">No variant images added yet</p>
             </div>
           )}
         </div>

@@ -10,7 +10,8 @@ const productSchema = new mongoose.Schema({
   },
   subcategory: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subcategory'
+    ref: 'Subcategory',
+    required: true
   },
   imageUrl: { type: String, required: true },
   galleryImages: [{ type: String }],
