@@ -107,18 +107,18 @@ export default async function HomePage() {
               { icon: Package, num: "05", title: "Production", desc: "Bulk manufacturing with rigid quality checks at every stage." },
               { icon: Truck, num: "06", title: "Delivery", desc: "On-time pan-India distribution with tracking and white-glove service." },
             ].map((step, i) => (
-              <div key={i} className="relative bg-white p-12 group hover:bg-gray-50 transition-colors duration-500 flex flex-col justify-between min-h-[300px]">
-                <div className="absolute top-8 right-8 text-8xl font-serif text-gray-50 group-hover:text-gray-100 transition-colors duration-500 font-bold">
+              <div key={i} className="relative bg-white p-12 group hover:bg-gray-50 active:bg-gray-50 transition-colors duration-500 flex flex-col justify-between min-h-[300px]">
+                <div className="absolute top-8 right-8 text-8xl font-serif text-gray-50 group-hover:text-gray-100 group-active:text-gray-100 transition-colors duration-500 font-bold">
                   {step.num}
                 </div>
                 <div className="relative z-10">
-                  <div className="w-10 h-10 border border-[#B8941F]/30 flex items-center justify-center mb-10 group-hover:border-[#B8941F] transition-colors duration-500">
+                  <div className="w-10 h-10 border border-[#B8941F]/30 flex items-center justify-center mb-10 group-hover:border-[#B8941F] group-active:border-[#B8941F] transition-colors duration-500">
                     <step.icon size={18} className="text-[#B8941F]" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wider">{step.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed font-serif">{step.desc}</p>
                 </div>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#B8941F] group-hover:w-full transition-all duration-700" />
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#B8941F] group-hover:w-full group-active:w-full transition-all duration-700" />
               </div>
             ))}
           </div>
