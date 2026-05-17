@@ -8,12 +8,14 @@ export default function SearchBar({
   className = "", 
   inputClassName = "", 
   buttonClassName = "",
-  placeholder = "I am looking for..."
+  placeholder = "I am looking for...",
+  onSearch
 }: { 
   className?: string;
   inputClassName?: string;
   buttonClassName?: string;
   placeholder?: string;
+  onSearch?: () => void;
 }) {
   const [query, setQuery] = useState("");
   const router = useRouter();
@@ -23,6 +25,7 @@ export default function SearchBar({
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
+      onSearch?.();
     }
   };
 

@@ -24,6 +24,10 @@ export default function Header({ categories = [] }: { categories: any[] }) {
   }, []);
 
   useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
@@ -202,7 +206,7 @@ export default function Header({ categories = [] }: { categories: any[] }) {
       }`}>
         <nav className="flex flex-col px-8 py-8 gap-6 flex-1 transition-all duration-700 delay-100">
             <div className="mb-2">
-              <SearchBar className="w-full" inputClassName="h-12 text-base" buttonClassName="px-5" />
+              <SearchBar className="w-full" inputClassName="h-12 text-base" buttonClassName="px-5" onSearch={() => setMobileOpen(false)} />
             </div>
             {navLinks.map((link) => (
               <Link 
