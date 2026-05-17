@@ -44,10 +44,8 @@ export default function Header({ categories = [] }: { categories: any[] }) {
   }, [lastScrollY]);
 
   const navLinks = [
-    { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/services", label: "Services" },
-    { href: "/contact", label: "Contact" },
   ];
 
   const headerBgClass = isScrolled || !isHome || mobileOpen ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100" : "bg-transparent border-transparent";
@@ -69,7 +67,7 @@ export default function Header({ categories = [] }: { categories: any[] }) {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 relative">
-          {navLinks.slice(0, 3).map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -206,7 +204,7 @@ export default function Header({ categories = [] }: { categories: any[] }) {
             <div className="mb-2">
               <SearchBar className="w-full" inputClassName="h-12 text-base" buttonClassName="px-5" />
             </div>
-            {navLinks.slice(0, 3).map((link) => (
+            {navLinks.map((link) => (
               <Link 
                 key={link.href} 
                 href={link.href} 

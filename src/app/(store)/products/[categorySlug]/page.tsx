@@ -22,13 +22,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     't-shirts': 'T-Shirts',
     'uniforms': 'Uniforms',
   };
-  const bannerUrl = slugToFolder[categorySlug] ? `/purplepalette.in/${encodeURIComponent(slugToFolder[categorySlug])}/banner.jpg` : null;
   await connectDB();
 
   const category = await Category.findOne({ slug: categorySlug }).lean();
   if (!category) {
     notFound();
   }
+
+  const bannerUrl = category.imageUrl || (slugToFolder[categorySlug] ? `/purplepalette.in/${encodeURIComponent(slugToFolder[categorySlug])}/banner.jpg` : null);
 
   const subcategories = await Subcategory.find({ category: category._id }).lean();
   const products = await Product.find({ category: category._id }).lean();

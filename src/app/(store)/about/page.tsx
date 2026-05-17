@@ -37,6 +37,11 @@ export default function AboutPage() {
               <p className="text-gray-500 leading-relaxed font-serif">
                 Our mission is simple: to transform everyday business transactions into meaningful relationships through the art of thoughtful gifting. We believe a well-crafted gift is more than just an item — it&apos;s an experience.
               </p>
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                <p className="text-sm text-gray-500 font-serif">
+                  <span className="font-sans uppercase font-bold text-xs text-[#B8941F] tracking-wider">GSTIN:</span> 09KYOPK2103N1ZV
+                </p>
+              </div>
             </div>
             <div className="relative flex justify-center">
               <div className="w-80 h-80 bg-white border border-[#B8941F]/20 p-3 animate-float shadow-2xl relative z-10 overflow-hidden">

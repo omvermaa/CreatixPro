@@ -112,7 +112,10 @@ export default async function StoreLayout({ children }: { children: React.ReactN
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">Contact</h4>
             <div className="flex flex-col gap-3 text-sm text-gray-500">
-              <span>creatixpro1@gmail.com</span><span>+91-8287884439</span><span>Delhi NCR, India</span>
+              <span>creatixpro1@gmail.com</span>
+              <span>+91-8287884439</span>
+              <span>Delhi NCR, India</span>
+              <span>GSTIN: 09KYOPK2103N1ZV</span>
             </div>
           </div>
         </div>

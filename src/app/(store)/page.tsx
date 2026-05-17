@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Users, Layers, Truck, CheckCircle, Palette, Star, Package, ArrowRight } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import connectDB from "@/lib/db";
 import Category from "@/lib/models/Category";
 import Product from "@/lib/models/Product";
@@ -86,16 +87,18 @@ export default async function HomePage() {
       </section>
 
       {/* ========== PROCESS SECTION ========== */}
-      <section className="bg-[#FAFAFA] py-24 relative">
-        <div className="absolute inset-0 bg-grid-pattern opacity-50" />
+      <section className="bg-[#FAFAFA] py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-20" />
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-sm text-[#B8941F] uppercase tracking-[0.3em] font-black">How We Work</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 uppercase tracking-tighter">
-              Our <span className="gradient-text italic">Process</span>
+          <div className="text-center mb-20">
+            <span className="text-xs text-[#B8941F] uppercase tracking-[0.5em] font-bold">Methodology</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 uppercase tracking-tight font-serif">
+              Our <span className="italic font-normal">Process</span>
             </h2>
+            <div className="w-12 h-px bg-[#B8941F] mx-auto mt-6" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-100 border border-gray-100">
             {[
               { icon: Users, num: "01", title: "Requirement Discussion", desc: "We understand your brand, goals, and the occasion to craft the perfect gifting strategy." },
               { icon: Layers, num: "02", title: "Product Selection", desc: "Curating the perfect items from our premium catalog of 50+ curated gift categories." },
@@ -104,15 +107,18 @@ export default async function HomePage() {
               { icon: Package, num: "05", title: "Production", desc: "Bulk manufacturing with rigid quality checks at every stage." },
               { icon: Truck, num: "06", title: "Delivery", desc: "On-time pan-India distribution with tracking and white-glove service." },
             ].map((step, i) => (
-              <div key={i} className="glass-card border-none bg-white p-10 group shadow-lg">
-                <div className="flex items-center gap-6 mb-8">
-                  <div className="w-14 h-14 bg-[#B8941F]/10 flex items-center justify-center group-hover:bg-[#B8941F]/20 transition-colors duration-300">
-                    <step.icon size={24} className="text-[#B8941F]" />
-                  </div>
-                  <span className="text-6xl font-black text-gray-100 group-hover:text-[#B8941F]/30 transition-colors duration-300 tracking-tighter">{step.num}</span>
+              <div key={i} className="relative bg-white p-12 group hover:bg-gray-50 transition-colors duration-500 flex flex-col justify-between min-h-[300px]">
+                <div className="absolute top-8 right-8 text-8xl font-serif text-gray-50 group-hover:text-gray-100 transition-colors duration-500 font-bold">
+                  {step.num}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase tracking-tight">{step.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed font-serif">{step.desc}</p>
+                <div className="relative z-10">
+                  <div className="w-10 h-10 border border-[#B8941F]/30 flex items-center justify-center mb-10 group-hover:border-[#B8941F] transition-colors duration-500">
+                    <step.icon size={18} className="text-[#B8941F]" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wider">{step.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed font-serif">{step.desc}</p>
+                </div>
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#B8941F] group-hover:w-full transition-all duration-700" />
               </div>
             ))}
           </div>
@@ -124,33 +130,14 @@ export default async function HomePage() {
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#B8941F]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-sm text-[#B8941F] uppercase tracking-widest font-medium">Testimonials</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4">
-              What our <span className="gradient-text">clients</span> say
+            <span className="text-xs text-[#B8941F] uppercase tracking-[0.5em] font-bold">Testimonials</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 uppercase tracking-tight font-serif">
+              What our <span className="italic font-normal">clients</span> say
             </h2>
+            <div className="w-12 h-px bg-[#B8941F] mx-auto mt-6" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            {[
-              { quote: "Creatix Pro completely transformed our employee welcome kits. The quality and the elegant branding were superb. Highly recommended for any serious organization.", name: "Priya Sharma", role: "HR Director, Tech Innovations Ltd." },
-              { quote: "We needed high-end custom gifts for an executive summit on very short notice. Creatix Pro delivered beyond our expectations with incredible attention to detail.", name: "Rajesh Mehta", role: "Events Manager, Global Finance Group" },
-            ].map((t, i) => (
-              <div key={i} className="bg-white p-12 border border-gray-100 relative shadow-xl">
-                <Star size={40} className="text-[#B8941F]/10 absolute top-8 right-8" />
-                <p className="text-gray-700 leading-relaxed mb-10 text-xl font-serif italic">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div className="flex items-center gap-4 border-t border-gray-100 pt-8">
-                  <div className="w-12 h-12 bg-[#B8941F]/10 flex items-center justify-center font-bold text-[#B8941F]">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900 uppercase tracking-wider text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-400 uppercase tracking-widest">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          
+          <TestimonialsCarousel />
         </div>
       </section>
     </div>
