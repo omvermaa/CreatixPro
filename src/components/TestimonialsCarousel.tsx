@@ -149,7 +149,6 @@ export default function TestimonialsCarousel() {
         onScroll={handleScroll}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
-        onMouseLeave={onMouseLeave}
         onMouseMove={onMouseMove}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => { setIsPaused(false); setIsDragging(false); }}
