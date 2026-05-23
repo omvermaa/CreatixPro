@@ -37,8 +37,12 @@ export default function AdminSidebar() {
       {/* Sidebar */}
       <aside className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-[#0A0A0A] text-white flex flex-col transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         <div className="p-6 border-b border-gray-800 md:pt-6 pt-16">
-          <Link href="/admin" className="text-xl font-bold font-serif tracking-widest text-white" onClick={() => setIsOpen(false)}>
-            CREATIX ADMIN
+          <Link href="/admin" className="block" onClick={() => setIsOpen(false)}>
+            <img 
+              src="/navlogo.png" 
+              alt="Creatix Pro Logo" 
+              className="h-8 w-auto object-contain" 
+            />
           </Link>
         </div>
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">

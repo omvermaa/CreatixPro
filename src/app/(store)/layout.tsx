@@ -88,10 +88,11 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         <div className="max-w-7xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#B8941F] to-[#9A7B15] flex items-center justify-center">
-                <Gift size={20} className="text-white" />
-              </div>
-              <span className="text-lg font-bold uppercase">CREATIX<span className="text-[#B8941F]">PRO</span></span>
+              <img 
+                src="/navlogo.png" 
+                alt="Creatix Pro Logo" 
+                className="h-10 w-auto object-contain" 
+              />
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">Premium corporate gifting solutions that transform business relationships into lasting bonds.</p>
           </div>

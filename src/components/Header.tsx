@@ -62,12 +62,11 @@ export default function Header({ categories = [] }: { categories: any[] }) {
     } ${headerBgClass}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#B8941F] to-[#9A7B15] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-            <Gift size={20} className="text-white" />
-          </div>
-          <span className={`text-xl font-bold tracking-wide uppercase transition-colors duration-300 ${textColorClass}`}>
-            CREATIX<span className="text-[#B8941F]">PRO</span>
-          </span>
+          <img 
+            src="/navlogo.png" 
+            alt="Creatix Pro Logo" 
+            className="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300" 
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 relative">
